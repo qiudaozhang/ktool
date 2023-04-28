@@ -5,10 +5,28 @@ import java.nio.ByteBuffer
 object ArrayTool {
 
 
+
+    fun byte2hex(v:Byte):String{
+        return v.toUByte().toString(16).padStart(2,'0')
+//        return v.toString(16).padStart(Int.SIZE_BYTES,'0')
+    }
+
+    fun bytes2hex(v:ByteArray):String{
+        // 1个byte 8个位 16进制换算是2个符号
+//        return v.asUByteArray().joinToString(""){it.toString(16).padStart(2,'0')}
+//        v.asUByteArray().map {
+//            byte2hex(it.toByte())
+//        }
+        return v.map { byte2hex(it) }.reduce{a,b->a+b}
+//        return v.asUByteArray().joinToString(""){it.toString(16).padStart(2,'0')}
+    }
+
+
     @JvmStatic
     fun byte01String(b: Byte): String {
         // 保留8位数字
-        val s = Integer.toBinaryString(b.toInt()).padStart(Int.SIZE_BITS, '0')
+//        val s = Integer.toBinaryString(b.toInt()).padStart(Int.SIZE_BYTES, '0')
+        val s = Integer.toBinaryString(b.toInt()).padStart(8, '0')
         return s.takeLast(8)
     }
 
@@ -55,8 +73,24 @@ object ArrayTool {
     @JvmStatic
     fun main(args: Array<String>) {
 
-        val a = 3282
+        val a = 255
         val arr = int2array(a)
-        println(array2int(arr.drop(2).toByteArray()))
+//        println(array2int(arr.drop(2).toByteArray()))
+//        println(bytes2hex(arr))
+
+//        println(byte2hex(24))
+//        println(byte2hex(-23))
+
+        println(bytes2hex(byteArrayOf(2,53,43,21)))
+
+//        println(byte01String(1))
+//        println(byte01String(0))
+//        println(byte01String(-1))
+//
+//        arr.forEach {
+//            println(it)
+//            println(byte01String(it))
+//            println(byte2hex(it))
+//        }
     }
 }

@@ -27,7 +27,7 @@ object StrTool {
      * 是否满足通配符写法的匹配
      *
      * @param target    目标字符串       eg:/a/b
-     * @param base      比较基准        eg:/a/星
+     * @param base      比较基准        eg:/a/☆
      * @return
      */
     @JvmStatic
@@ -192,6 +192,9 @@ object StrTool {
         val w = "${letter26()}${capital26()}${num10()}"
         return random(w, len)
     }
+
+
+
 
     @JvmStatic
     fun main(args: Array<String>) {

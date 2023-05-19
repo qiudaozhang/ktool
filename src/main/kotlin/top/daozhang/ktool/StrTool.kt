@@ -195,10 +195,4 @@ object StrTool {
 
 
 
-
-    @JvmStatic
-    fun main(args: Array<String>) {
-        println(randomAlphaNum(len = 12))
-    }
-
 }

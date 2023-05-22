@@ -1,5 +1,6 @@
 package top.daozhang.ktool
 
+import top.daozhang.ktool.pojo.FileMeta
 import top.daozhang.ktool.pojo.FileTimeMeta
 import java.io.File
 import java.nio.file.Files
@@ -10,7 +11,19 @@ import java.time.ZoneId
 object FileTool {
 
 
+    enum class FileSortType {
+        CREATE_TIME,
+        UPDATE_TIME,
+        NAME,
+        SIZE,
+    }
 
+
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val data = sortFile("C:\\Users\\dao\\Downloads", FileSortType.SIZE, false)
+        data.forEach { println(it) }
+    }
 
     /**
      * 重命名某个目录下的所有文件
@@ -61,9 +74,77 @@ object FileTool {
         if (asc) {
             metas.sortBy { it.createTime }
         } else {
-            metas.sortedByDescending { it.createTime }
+            metas.sortByDescending { it.createTime }
         }
         return metas
+    }
+
+    @JvmStatic
+    fun sortFile(path: String, sortType: FileSortType, asc: Boolean = true): List<FileMeta> {
+        val f = File(path)
+        val metas = mutableListOf<FileMeta>()
+        if (f.exists()) {
+            if (f.isDirectory) {
+                f.listFiles()?.forEach { file ->
+                    run {
+                        val m = FileMeta()
+                        m.name = file.name
+                        when (sortType) {
+                            FileSortType.CREATE_TIME -> {
+                                val attr = Files.readAttributes(file.toPath(), BasicFileAttributes::class.java)
+                                val ct = attr.creationTime()
+                                val ldt = LocalDateTime.ofInstant(ct.toInstant(), ZoneId.systemDefault())
+                                m.createTime = ldt
+                            }
+                            FileSortType.UPDATE_TIME -> {
+                                val attr = Files.readAttributes(file.toPath(), BasicFileAttributes::class.java)
+                                val ct = attr.lastModifiedTime()
+                                val ldt = LocalDateTime.ofInstant(ct.toInstant(), ZoneId.systemDefault())
+                                m.updateTime = ldt
+                            }
+                            FileSortType.SIZE -> {
+                                val attr = Files.readAttributes(file.toPath(), BasicFileAttributes::class.java)
+                                val size = attr.size()
+                                m.size = size
+                            }
+
+                            else -> {}
+                        }
+
+                        metas.add(m)
+                    }
+                }
+            }
+        }
+        when (sortType) {
+            FileSortType.CREATE_TIME -> {
+                if (asc) {
+                    metas.sortBy { it.createTime }
+                } else {
+                    metas.sortByDescending { it.createTime }
+                }
+            }
+
+            FileSortType.UPDATE_TIME -> {
+                if (asc) {
+                    metas.sortedBy { it.updateTime }
+                } else {
+                    metas.sortByDescending { it.updateTime }
+                }
+            }
+
+            FileSortType.SIZE -> {
+                if (asc) {
+                    metas.sortBy { it.size }
+                } else {
+                    metas.sortByDescending { it.size }
+                }
+            }
+
+            else -> {}
+        }
+        return metas.toList()
+
     }
 
 

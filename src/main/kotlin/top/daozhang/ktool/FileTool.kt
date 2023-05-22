@@ -1,8 +1,15 @@
 package top.daozhang.ktool
 
+import top.daozhang.ktool.pojo.FileTimeMeta
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.attribute.BasicFileAttributes
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 object FileTool {
+
+
 
 
     /**
@@ -16,17 +23,15 @@ object FileTool {
         val f = File(dir)
         if (f.exists()) {
             if (f.isDirectory) {
-                val files = f.listFiles()
                 var i = start
                 val s = File.separator
-                files.forEach { file ->
+                f.listFiles()?.forEach { file ->
                     run {
                         val name = file.name
                         val lastDot = name.lastIndexOf(".")
                         val suffix = name.drop(lastDot)
                         val newName = "${i}${suffix}"
                         val fullNewName = "${dir}${s}${newName}"
-//                        println(fullNewName)
                         file.renameTo(File(fullNewName))
                         i += 1
                     }
@@ -34,6 +39,31 @@ object FileTool {
             }
         }
 
+    }
+
+    @JvmStatic
+    fun sortCreatTime(path: String, asc: Boolean = true): MutableList<FileTimeMeta> {
+        val f = File(path)
+        val metas = mutableListOf<FileTimeMeta>()
+        if (f.exists()) {
+            if (f.isDirectory) {
+                f.listFiles()?.forEach { file ->
+                    run {
+                        val attr = Files.readAttributes(file.toPath(), BasicFileAttributes::class.java)
+                        val ct = attr.creationTime()
+                        val ldt = LocalDateTime.ofInstant(ct.toInstant(), ZoneId.systemDefault())
+                        val meta = FileTimeMeta(file.name, ldt)
+                        metas.add(meta)
+                    }
+                }
+            }
+        }
+        if (asc) {
+            metas.sortBy { it.createTime }
+        } else {
+            metas.sortedByDescending { it.createTime }
+        }
+        return metas
     }
 
 

@@ -171,6 +171,7 @@ object StrTool {
      * @param len
      * @return
      */
+    @JvmStatic
     fun random(input: String, len: Int): String {
         val length = input.length
         val sb = StringBuilder()

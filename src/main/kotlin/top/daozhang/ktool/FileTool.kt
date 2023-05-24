@@ -21,8 +21,6 @@ object FileTool {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        val data = sortFile("C:\\Users\\dao\\Downloads", FileSortType.SIZE, false)
-        data.forEach { println(it) }
     }
 
     /**

@@ -73,24 +73,5 @@ object ArrayTool {
     @JvmStatic
     fun main(args: Array<String>) {
 
-        val a = 255
-        val arr = int2array(a)
-//        println(array2int(arr.drop(2).toByteArray()))
-//        println(bytes2hex(arr))
-
-//        println(byte2hex(24))
-//        println(byte2hex(-23))
-
-        println(bytes2hex(byteArrayOf(2,53,43,21)))
-
-//        println(byte01String(1))
-//        println(byte01String(0))
-//        println(byte01String(-1))
-//
-//        arr.forEach {
-//            println(it)
-//            println(byte01String(it))
-//            println(byte2hex(it))
-//        }
     }
 }

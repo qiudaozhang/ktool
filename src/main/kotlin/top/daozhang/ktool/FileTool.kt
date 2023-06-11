@@ -10,6 +10,11 @@ import java.time.ZoneId
 
 object FileTool {
 
+    @JvmStatic
+    fun main(args: Array<String>) {
+        renameAll("E:\\DFL_maozhihanhua_RTX3000\\workspace\\data_src\\aligned",10000)
+    }
+
 
     enum class FileSortType {
         CREATE_TIME,
@@ -19,9 +24,6 @@ object FileTool {
     }
 
 
-    @JvmStatic
-    fun main(args: Array<String>) {
-    }
 
     /**
      * 重命名某个目录下的所有文件

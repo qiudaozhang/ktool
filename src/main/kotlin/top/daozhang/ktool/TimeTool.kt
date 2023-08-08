@@ -15,18 +15,30 @@ import java.util.Locale
 object TimeTool {
 
 
-
+    @JvmStatic
+    fun sec2word(v:Long):String{
+        val second = v % 60 // 剩余的秒数
+        val minute = v / 60 // 总分钟数
+        if(minute >= 60){
+            // 超过小时
+            val min = minute % 60
+            val hour = minute / 60
+            if(hour < 24){
+                return "${hour}时${min}分${second}秒"
+            } else {
+                val day  = hour/24
+                val hour2 = hour % 24
+                return "${day}天${hour2}时${min}分${second}秒"
+            }
+        } else {
+            return "${minute}分${second}秒"
+        }
+    }
 
     @JvmStatic
     fun main(args: Array<String>) {
-        // 2023-5-24 10:31:23
-        val fmt  = "yyyy-M-dd HH:mm:ss"
-        val one = str2ldt("2023-5-24 09:53:04",fmt)
-//        val two = LocalDateTime.now()
-        val two = str2ldt("2023-5-24 16:26:28",fmt)
-        val sec = secondDiff(one,two)
-        val minute = sec/60
-        println(minute)
+
+        println(sec2word(95254))
 
     }
 
@@ -200,6 +212,8 @@ object TimeTool {
         val formatter = DateTimeFormatter.ofPattern(format)
         return LocalDateTime.parse(str, formatter)
     }
+
+
 
 
 
